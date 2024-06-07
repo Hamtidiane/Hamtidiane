@@ -1,0 +1,72 @@
+void setup() {
+    int rows = 10;
+    int cols = 10;
+    int[][] tab = initBoard(rows, cols, 3);
+
+    // test(tab);
+    affichPos(tab);
+
+    // println(tableau + " a");
+    // isAMine(tab, 2, 5);
+    // println(isAMine(tab, 3, 5));
+    // getMines(tab, 2, 5, 3);
+}
+
+/*void test(int[][] tab) {
+    int size = tab.length;
+
+    for (int p = 0; p < size; p++) {
+        for (int c = 0; c < size; c++) {
+            print(tab[p][c]);
+        }
+        println();
+    }
+}*/
+
+int[][] initBoard(int row, int col, int nbMines) {//ici je crée la fonction avec  des (entiers ligne et colonne  et le nombre de mine)qui retourne un tableau 
+    int[][] tab = new int[row][col];//création d'un nouveau tableau 
+    while (nbMines != 0) {// tant que le nombre de mine est différent de zéro
+        int ranRow = (int) random(row);//j'effectue un random sur la ligne  qui consiste a mettre les bombes de manière aléatoire et je fais un caste(convertir float en int )
+        int ranCol = (int) random(col);//ici un random sur la colonne 
+        if (tab[ranRow][ranCol] == 0) {//si valeur tab random ligne et colonne est égale a 0 
+            tab[ranRow][ranCol] = 99;// tab valeur ligne et colonne devient 99
+            nbMines--;
+        }
+    }
+    return tab;
+}
+
+boolean isAMine(int[][] tableau, int i, int j) {//ici je crée une fonction booléene qui retourne(return) une valeur vrai ou faux  avec un tableau et deux entiers en parametre 
+    return tableau[i][j] == 99;// si la valeur de ta[i][j]==99(si mine) la fonction retourne true et dans le cas contraire false
+}
+
+int getMines(int[][] tableau, int row, int col) {//ici je crée une fonction qui nous dit quand il y a une mine dans la case suivante avec pour paramètre un tableau a 2 entrées et deux entiers ligne et colonne 
+    int nbMines = 0;//je déclare une variable entier qui initialise le nombre de bombe a 0 en dehors de la boucle 
+
+    for (int i = -1; i <= 1; i++) {//boucle qui prend en compte la case précédente et suivante pour les lignes
+        for (int j = -1; j <= 1; j++) {// ici pour les colonnes 
+            if (i == 0 && j == 0) continue; 
+            int newRow = row + i;//je declare un nouvel entier qui prend la valeur de la ligne +1
+            int newCol = col + j;//ici pour les colonnes +1
+            if (newRow >= 0 && newRow < tableau.length && newCol >= 0 && newCol < tableau[0].length) {//condition pour que la boucle soit valable 
+                if (isAMine(tableau, newRow, newCol)) {
+                    nbMines++;
+                }
+            }
+        }
+    }
+    return nbMines;
+}
+
+void affichPos(int[][] tableau) {//fonction qui affiche les différentes position de la bombe et prends getMines afin d'afficher le nombre de bombe dans les cases adjacentes
+    for (int i = 0; i < tableau.length; i++) {//boucle qui parcours le tableau en paramètre qui commence par i et boucle boucle ensuite j avant de revenir dans i
+        for (int j = 0; j < tableau[i].length; j++) {//tableau[i] par ce la boucle debute avec un index ligne ensuite boucle les colonnes avant de revenir sur les lignes 
+            if (isAMine(tableau, i, j)) {
+                print(" x");
+            } else {
+                print(" " + getMines(tableau, i, j));
+            }
+        }
+        println();
+    }
+}
